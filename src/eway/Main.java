@@ -10,7 +10,6 @@ import eway.util.StringUtil;
 public class Main {
 
     static final FileHandle fileHandle = new FileHandleImpl();
-    static final StringUtil stringUtil = new StringUtil();
     static final Service service = new ServiceImpl();
 
     public static void main(String[] args) {

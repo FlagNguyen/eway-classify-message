@@ -1,6 +1,7 @@
 package eway.file.impl;
 
 import eway.constant.Constant;
+import eway.domain.Message;
 import eway.file.FileHandle;
 import eway.service.Service;
 import eway.service.impl.ServiceImpl;
@@ -15,7 +16,6 @@ import java.util.logging.Logger;
 public class FileHandleImpl implements FileHandle {
 
     private final StringUtil stringUtil = new StringUtil();
-    private final Service service = new ServiceImpl();
     Logger logger = Logger.getLogger(FileHandleImpl.class.getName());
 
     /**
@@ -23,8 +23,8 @@ public class FileHandleImpl implements FileHandle {
      * @return list of all message in input directory which sorted by time and formatted by output format
      */
     @Override
-    public List<String> readFile(String inputDirPath) {
-        List<String> messages = new ArrayList<>();
+    public List<Message> readFile(String inputDirPath) {
+        List<Message> messages = new ArrayList<>();
         File dir = new File(inputDirPath);
         String[] files = dir.list();
 
@@ -34,9 +34,10 @@ public class FileHandleImpl implements FileHandle {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(f));
                 while ((line = reader.readLine()) != null) {
-                    messages.add(stringUtil.getTimeStringFromLine(line) + "|"
-                            + file.replace(".txt", "") + "|"
-                            + stringUtil.getContentFromLine(line));
+                    String content = stringUtil.getContentFromLine(line);
+                    String phoneNumber = file.replace(".txt", "");
+                    String time = stringUtil.getTimeStringFromLine(line);
+                    messages.add(new Message(phoneNumber, content, time));
                 }
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error: error when read file " + file);
@@ -44,6 +45,7 @@ public class FileHandleImpl implements FileHandle {
         }
 
         Collections.sort(messages, new SortMessageByTime());
+        logger.log(Level.INFO, "Read files successfully");
         return messages;
     }
 
@@ -52,22 +54,23 @@ public class FileHandleImpl implements FileHandle {
      * @implNote write sorted messages into file.txt for each date.
      */
     @Override
-    public void writeIntoFile(Map<String, List<String>> messageMapByDate) {
-        Set<String> dateSet = service.getDateSet(readFile(Constant.INPUT_DIR_PATH));
+    public void writeIntoFile(Map<String, List<Message>> messageMapByDate) {
+        Set<String> dateSet = messageMapByDate.keySet();
         for (String date : dateSet) {
-            FileWriter fileWriter = null;
+            FileWriter fileWriter;
             try {
                 fileWriter = new FileWriter(Constant.OUTPUT_DIR_PATH
                         + date.replace("/", "") + ".txt", false);
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                List<String> messageOfDate = messageMapByDate.get(date);
-                for (String mess : messageOfDate) {
-                    bufferedWriter.write(mess + "\n");
+                List<Message> messageOfDate = messageMapByDate.get(date);
+                for (Message mess : messageOfDate) {
+                    bufferedWriter.write(mess.toString() + "\n");
                 }
                 bufferedWriter.flush();
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error: error when write into file");
             }
         }
+        logger.log(Level.INFO, "Write into files successfully");
     }
 }

@@ -13,19 +13,19 @@ public class StringUtil {
 
     private final Logger logger = Logger.getLogger(StringUtil.class.getName());
 
-    public String getContentFromLine(String line){
+    public String getContentFromLine(String line) {
         return line.split("\\|")[0];
     }
 
-    public String getTimeStringFromLine(String line){
+    public String getTimeStringFromLine(String line) {
         return line.trim().split("\\|")[1];
     }
 
-    public String getTimeStringFromMessage(String message){
+    public String getTimeStringFromMessage(String message) {
         return message.trim().split("\\|")[0];
     }
 
-    public Date getTimeFromMessage(String message){
+    public Date getTimeFromMessage(String message) {
         return convertStringToDate(getTimeStringFromMessage(message));
     }
 
