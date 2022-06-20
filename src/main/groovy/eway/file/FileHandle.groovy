@@ -3,7 +3,7 @@ package eway.file
 import eway.domain.Message
 
 interface FileHandle {
-    List<Message> readFile(String inputDirPath)
+    List<Message> readInputPhoneNumberFolder(String inputDirPath)
 
-    void writeIntoFile(Map<String, List<Message>> messageMapByDate)
+    void writeIntoFiles(Map<String, List<Message>> messageMapByDate)
 }

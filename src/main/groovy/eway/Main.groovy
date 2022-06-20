@@ -9,7 +9,7 @@ import eway.service.impl.ServiceImpl
 static void main(String[] args) {
     final FileHandle fileHandle = new FileHandleImpl()
     final Service service = new ServiceImpl()
-    fileHandle.writeIntoFile(
+    fileHandle.writeIntoFiles(
             service.classifyMessByDate(
-                    fileHandle.readFile(Constant.INPUT_DIR_PATH)))
+                    fileHandle.readInputPhoneNumberFolder(Constant.INPUT_DIR_PATH)))
 }

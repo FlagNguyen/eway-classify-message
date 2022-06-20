@@ -22,16 +22,16 @@ class ServiceImpl implements Service {
     Map<String, List<Message>> classifyMessByDate(List<Message> messages) {
             Map<String, List<Message>> receivedMessagesByDate = new HashMap<>()
 
-        for (String date : getDistinctDates(messages)) {
+        for (date in getDistinctDates(messages)) {
             List<Message> messageOfDate = new ArrayList<>()
-            for (Message message : messages) {
+            for (message in messages) {
                 if (date.equals(stringUtil.getDateFromMessage(message.getTime()))) {
                     messageOfDate.add(message)
                 }
                 receivedMessagesByDate.put(date, messageOfDate)
             }
         }
-        logger.log(Level.INFO,"Classify files successfully")
+        logger.info("Classify files successfully")
         return receivedMessagesByDate
     }
 
@@ -42,7 +42,7 @@ class ServiceImpl implements Service {
     @Override
     Set<String> getDistinctDates(List<Message> messages) {
         Set<String> distinctDates = new HashSet<>()
-        for (Message mess : messages) {
+        for (mess in messages) {
             distinctDates.add(stringUtil.getDateFromMessage(mess.getTime()))
         }
         return distinctDates

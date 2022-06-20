@@ -20,28 +20,28 @@ class FileHandleImpl implements FileHandle {
      * @return list of all message in input directory which sorted by time and formatted by output format
      */
     @Override
-    List<Message> readFile(String inputPhoneNumberFolderPath) {
+    List<Message> readInputPhoneNumberFolder(String inputPhoneNumberFolderPath) {
         List<Message> messages = new ArrayList<>()
         File inputPhoneNumberFolder = new File(inputPhoneNumberFolderPath)
 
-        for (String childFile : inputPhoneNumberFolder.list()) {
+        for (childFile in inputPhoneNumberFolder.list()) {
             try {
                 File phoneNumberFile = new File(inputPhoneNumberFolder, childFile)
                 List phoneNumbers = FileUtils.readLines(phoneNumberFile, "UTF-8")
 
-                for (String line : phoneNumbers) {
+                for (line in phoneNumbers) {
                     String content = stringUtil.getContentFromLine(line)
                     String phoneNumber = childFile.replace(".txt", "")
                     String time = stringUtil.getTimeStringFromLine(line)
                     messages.add(new Message(phoneNumber, content, time))
                 }
             } catch (e) {
-                logger.log(Level.WARNING, "Error: error when read file " + childFile)
+                logger.warning("Error: error when read file " + childFile)
             }
         }
 
         Collections.sort(messages, new SortMessageByTime())
-        logger.log(Level.INFO, "Read files successfully")
+        logger.info("Read files successfully")
         return messages
     }
 
@@ -52,18 +52,19 @@ class FileHandleImpl implements FileHandle {
      * @implNote write sorted messages into file.txt for each date.
      */
     @Override
-    void writeIntoFile(Map<String, List<Message>> messageMapByDate) {
-        for (String date : messageMapByDate.keySet()) {
+    void writeIntoFiles(Map<String, List<Message>> messageMapByDate) {
+        for (date in messageMapByDate.keySet()) {
             try {
                 String outputFileName = Constant.OUTPUT_DIR_PATH + date.replace("/", "") + ".txt"
+                File outputPhoneNumberFile = new File(outputFileName)
                 List<Message> messageOfDate = messageMapByDate.get(date)
-                for (Message mess : messageOfDate) {
-                    FileUtils.write(new File(outputFileName), mess.toString() + "\n", "UTF-8", true)
+                for (mess in messageOfDate) {
+                    FileUtils.write(outputPhoneNumberFile, mess.toString() + "\n", "UTF-8", true)
                 }
             } catch (e) {
-                logger.log(Level.WARNING, "Error: error when write into file")
+                logger.warning("Error: error when write into file: "+e)
             }
         }
-        logger.log(Level.INFO, "Write into files successfully")
+        logger.info("Write into files end")
     }
 }

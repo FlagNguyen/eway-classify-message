@@ -1,10 +1,8 @@
-package eway.util;
+package eway.util
 
-import eway.domain.Message;
+import eway.domain.Message
 
-import java.util.Comparator;
-
-public class SortMessageByTime implements Comparator<Message> {
+class SortMessageByTime implements Comparator<Message> {
     private final StringUtil stringUtil = new StringUtil();
 
     /**
@@ -13,7 +11,7 @@ public class SortMessageByTime implements Comparator<Message> {
      * @return compare 02 mess by time
      */
     @Override
-    public int compare(Message mess1, Message mess2) {
+    int compare(Message mess1, Message mess2) {
         return stringUtil.convertStringToDate(mess1.getTime())
                 .compareTo(stringUtil.convertStringToDate(mess2.getTime()));
     }

@@ -5,7 +5,6 @@ import eway.constant.Constant
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.logging.Level
 import java.util.logging.Logger
 
 class StringUtil {
@@ -24,10 +23,6 @@ class StringUtil {
         return message.trim().split("\\|")[0]
     }
 
-    Date getTimeFromMessage(String message) {
-        return convertStringToDate(getTimeStringFromMessage(message))
-    }
-
     String getDateFromMessage(String mess) {
         return getTimeStringFromMessage(mess).split(" ")[0]
     }
@@ -38,7 +33,7 @@ class StringUtil {
         try {
             return dateFormat.parse(time.trim())
         } catch (ParseException pe) {
-            logger.log(Level.WARNING, "Error: convert string to date failure")
+            logger.warning("Error: convert string to date failure")
         }
         return new Date()
     }
